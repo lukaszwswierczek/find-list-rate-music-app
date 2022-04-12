@@ -8,27 +8,40 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="../../header.jsp" %>
-<table>
-    <tr>
-        <th></th>
-        <th></th>
-        <th>Add to favorites</th>
-    </tr>
-    <c:forEach items="${tracks}" var="track">
-        <tr>
-            <td>${track.intTrackNumber}</td>
-            <td>${track.strTrack}</td>
-            <td>
-                <form method="get" action="/add/track-to-favorites">
-                    <input type="hidden" name="idTrack" value="${track.idTrack}">
-                    <input type="hidden" name="idAlbum" value="${track.idAlbum}">
-                    <button type="submit" class="btn-success border-0 btn-circle">
 
-                    </button>
-                </form>
-            </td>
-        </tr>
-    </c:forEach>
-</table>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary">Tracklist for ${tracks.get(0).strAlbum} by ${tracks.get(0).strArtist}:</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
 
+            <table class="table" id="dataTable" width="100% cellspacing="0">
+                <thead class="font-weight-bold text-primary">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th align="center">Add to favorites</th>
+                </tr>
+                </thead>
+                <c:forEach items="${tracks}" var="track">
+                    <tr>
+                        <td>${track.intTrackNumber}</td>
+                        <td>${track.strTrack}</td>
+                        <td align="center">
+                            <form method="get" action="/add/track-to-favorites">
+                                <input type="hidden" name="idTrack" value="${track.idTrack}">
+                                <input type="hidden" name="idAlbum" value="${track.idAlbum}">
+                                <button type="submit" class="btn btn-google btn-block">
+                                    Add
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+    </div>
+</div>
 <%@ include file="../../footer.jsp" %>

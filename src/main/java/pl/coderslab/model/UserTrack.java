@@ -10,16 +10,16 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Table(name = "tracks")
-public class UserAlbumTrack {
+public class UserTrack {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String idTrack;
+    private String idAlbum;
     private String artist;
     private String album;
     private String title;
     private String genre;
-    private Integer duration;
+    private String duration;
     private String rating;
 
 }

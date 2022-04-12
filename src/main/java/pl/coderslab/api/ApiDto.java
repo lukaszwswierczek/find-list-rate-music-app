@@ -1,14 +1,19 @@
 package pl.coderslab.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.json.JsonParseException;
 import pl.coderslab.model.Album;
 import pl.coderslab.model.Artist;
 import pl.coderslab.model.Track;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,18 +27,20 @@ public class ApiDto {
     private List<Album> albums = new ArrayList<>();
     private List<Track> trackList = new ArrayList<>();
 
+
     @JsonProperty("artists")
     private void unpackNestedArtist(Map<String, Object>[] artists) {
-        for (Map<String, Object> artistInfo : artists) {
-            Artist tempArtist = new Artist();
+        if (artists != null) {
+            for (Map<String, Object> artistInfo : artists) {
+                Artist tempArtist = new Artist();
 
-            tempArtist.setIdArtist((String) artistInfo.get("idArtist"));
-            tempArtist.setStrArtist((String) artistInfo.get("strArtist"));
-            tempArtist.setStrGenre((String) artistInfo.get("strGenre"));
-            tempArtist.setStrArtistThumb((String) artistInfo.get("strArtistThumb"));
-            tempArtist.setStrBiographyEN((String) artistInfo.get("strBiographyEN"));
-
-            artistList.add(tempArtist);
+                tempArtist.setIdArtist((String) artistInfo.get("idArtist"));
+                tempArtist.setStrArtist((String) artistInfo.get("strArtist"));
+                tempArtist.setStrGenre((String) artistInfo.get("strGenre"));
+                tempArtist.setStrArtistThumb((String) artistInfo.get("strArtistThumb"));
+                tempArtist.setStrBiographyEN((String) artistInfo.get("strBiographyEN"));
+                artistList.add(tempArtist);
+            }
         }
     }
 

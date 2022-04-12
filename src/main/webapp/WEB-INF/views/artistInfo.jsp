@@ -11,40 +11,48 @@
 <%@ include file="../../header.jsp" %>
 
 <c:forEach items="${artistList}" var="artist">
-    <table>
-        <tr>
-            <td><img src="${artist.strArtistThumb}/preview"/></td>
-            <td><h1>${artist.strArtist}</h1></td>
-        </tr>
-    </table>
 
-    <table>
-        <tr>
-            <th>Artist</th>
-            <th>Genre</th>
-            <th>Biography</th>
+    <!-- Illustrations -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Artist info:</h6>
+        </div>
+        <div class="card-body">
+            <div>
+                <table>
+                    <tr>
+                        <td><img src="${artist.strArtistThumb}/preview" class="img-fluid px-3 px-sm-4 mt-3 mb-4"/></td>
+                        <td>
+                            <h1>${artist.strArtist}</h1>
+                            <h2>${artist.strGenre}</h2>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-        </tr>
+    </div>
+    <div class="justify-content-center">
 
-        <tr>
-            <td>${artist.strArtist}</td>
-            <td>${artist.strGenre}</td>
-            <td>${artist.strBiographyEN}</td>
+    <div class="card-body">
+            ${artist.strBiographyEN}
+    </div>
 
-        </tr>
-
-    </table>
-
+    <div class="dropdown-divider"></div>
 <%--    przekierowanie do listy albumow--%>
+
+    <div class="card-body">
         <form method="get" action="/albums">
             <input type="hidden" name="idArtist" value="${artist.idArtist}"/>
             <button class="btn btn-primary btn-icon-split btn-lg" type="submit">
             <span class="icon text-white-50">
                 <i class="fas fa-flag"></i>
+
             </span>
                 <span class="text">Find ${artist.strArtist}'s albums</span>
             </button>
         </form>
+    </div>
 
 </c:forEach>
 

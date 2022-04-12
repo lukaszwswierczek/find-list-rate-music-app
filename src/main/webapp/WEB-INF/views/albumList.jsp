@@ -10,35 +10,74 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ include file="../../header.jsp" %>
-<h2>${artistName} discography:</h2>
-<table>
-    <tr>
-        <th>Album</th>
-        <th>Year</th>
-        <th>Genre</th>
-        <th>Art Cover</th>
-    </tr>
-    <c:forEach items="${albums}" var="album">
-        <c:if test="${album.strReleaseFormat == 'Album'}">
-            <tr>
-                <td>${album.strAlbum}</td>
-                <td>${album.intYearReleased}</td>
-                <td>${album.strGenre}</td>
-                <td><img src="${album.strAlbumThumb}/preview"/></td>
-                <td>
-                    <form method="get" action="/album/add" id="add">
-                        <input type="hidden" name="idArtist" value="${album.idArtist}">
-                        <input type="hidden" name="idAlbum" value="${album.idAlbum}">
-                        <input type="submit" value="Add">
-                    </form>
 
-                    <button type="button" name="tracklist">
-                        <a href="/tracks?idAlbum=${album.idAlbum}">See tracklist</a>
-                    </button>
-                </td>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary">${artistName} discography:</h4>
+    </div>
+
+
+    <div class="card-body">
+        <table class="table">
+            <tr class="font-weight-bold text-primary" align="center">
+                <th>Album</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Cover art</th>
+                <th></th>
             </tr>
-        </c:if>
-    </c:forEach>
-</table>
-<%--<script src='<spring:url value="/vendor/jquery/jquery.slim.min.js"/>'></script>--%>
-<%@ include file="../../footer.jsp" %>
+            <tfoot>
+            <tr class="font-weight-bold text-primary">
+                <th>Album</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Cover art</th>
+                <th></th>
+            </tr>
+            </tfoot>
+            <c:forEach items="${albums}" var="album">
+                <c:if test="${album.strReleaseFormat == 'Album'}">
+                    <tr>
+                        <td class="font-weight-bold text-primary">${album.strAlbum}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${album.intYearReleased == 0}">
+                                    [no data]
+                                </c:when>
+                                <c:otherwise>
+                                    ${album.intYearReleased}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>${album.strGenre}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${empty album.strAlbumThumb}">
+                                    [no cover art data]
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${album.strAlbumThumb}/preview"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="text-center">
+                            <form method="get" action="/album/add" id="add">
+                                <input type="hidden" name="idArtist" value="${album.idArtist}">
+                                <input type="hidden" name="idAlbum" value="${album.idAlbum}">
+                                <button class="btn btn-google btn-block" type="submit">Add
+                                </button>
+                            </form>
+                            <form action="/tracks" method="get">
+                                <input hidden name="idAlbum" value="${album.idAlbum}"/>
+                                <button class="btn btn-facebook btn-block" type="submit" name="tracklist">
+                                    Tracklist
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:if>
+            </c:forEach>
+        </table>
+    </div>
+    <%--<script src='<spring:url value="/vendor/jquery/jquery.slim.min.js"/>'></script>--%>
+    <%@ include file="../../footer.jsp" %>

@@ -1,5 +1,6 @@
 package pl.coderslab.api;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.coderslab.model.Album;
@@ -9,15 +10,15 @@ import pl.coderslab.model.Track;
 import java.util.List;
 
 @Service
-public class AudioDBApiService {
+public class ApiService {
 
     private final String API_URL_DISCOGRAPHY = "https://theaudiodb.com/api/v1/json/2/album.php?i=";
-    private final String API_URL_ARTIST_INFO = "https://www.theaudiodb.com/api/v1/json/2/search.php?s=";
+    private final String API_URL_ARTIST_INFO = "https://theaudiodb.com/api/v1/json/2/search.php?s=";
     private final String API_URL_TRACKLIST = "https://theaudiodb.com/api/v1/json/2/track.php?m=";
     private final String API_URL_ALBUM_INFO = "https://theaudiodb.com/api/v1/json/2/album.php?m=";
     private final String API_URL_TRACK_INFO = "https://theaudiodb.com/api/v1/json/2/track.php?h=";
 
-    public List<Artist> getArtistInfo(String artistName) {
+    public List<Artist> getArtistInfo(String artistName) throws HttpMessageNotReadableException {
 
         String query = API_URL_ARTIST_INFO + artistName;
         ApiDto apiDto = getDto(query);
@@ -32,6 +33,7 @@ public class AudioDBApiService {
         assert apiDto != null : "Returned JSON is null";
         return apiDto.getAlbums();
     }
+
     public List<Album> getSpecificAlbum(String idAlbum) {
 
         String query = API_URL_ALBUM_INFO + idAlbum;
@@ -60,5 +62,6 @@ public class AudioDBApiService {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForEntity(queryUrl, ApiDto.class)
                 .getBody();
+
     }
 }
