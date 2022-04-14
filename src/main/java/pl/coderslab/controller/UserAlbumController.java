@@ -34,7 +34,7 @@ public class UserAlbumController {
             userAlbum.setGenre(data.getStrGenre());
             userAlbum.setYearOfRelease(data.getIntYearReleased());
             userAlbum.setRating("0");
-            userAlbum.setIdAlbum(idAlbum);
+            userAlbum.setIdAlbum(Long.valueOf(idAlbum));
         });
         userAlbumRepository.save(userAlbum);
         return "redirect:/albums?idArtist=" + idArtist;
@@ -51,8 +51,9 @@ public class UserAlbumController {
 
     //album -- delete
     @GetMapping("/album/delete")
-    public String deleteAlbum(@RequestParam Long idAlbum) {
-        Optional<UserAlbum> album = userAlbumRepository.findById(idAlbum);
+    public String deleteAlbum(@RequestParam String idAlbum) {
+        long id = Long.parseLong(idAlbum);
+        Optional<UserAlbum> album = userAlbumRepository.findById(id);
         userAlbumRepository.delete(album.get());
         return "redirect:/albums/saved";
     }

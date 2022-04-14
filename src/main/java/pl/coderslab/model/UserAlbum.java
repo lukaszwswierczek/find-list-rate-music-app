@@ -14,7 +14,7 @@ public class UserAlbum {
 
     @Id
     @Column(name = "id")
-    private String idAlbum;
+    private Long idAlbum;
     //    @Column(name = "Artist")
     private String artist;
 //    @Column(name = "Album")

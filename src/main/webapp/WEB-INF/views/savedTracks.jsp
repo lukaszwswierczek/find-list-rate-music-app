@@ -6,7 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="../../header.jsp"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<%@include file="../../header.jsp" %>
 <body>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -19,11 +21,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h4 class="m-0 font-weight-bold text-primary">Favorite tracks:</h4>
+            <h6>Total tracks: ${total}.</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="font-weight-bold text-primary" >
+                    <thead class="font-weight-bold text-primary">
                     <tr>
                         <th>Title</th>
                         <th>Album</th>
@@ -36,31 +39,37 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${userTracks}" var="track">
-                        <tr>
-                            <td>${track.title}</td>
-                            <td>${track.album}</td>
-                            <td>${track.artist}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${empty track.genre}">
-                                        [no data]
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${track.genre}
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>${track.duration}</td>
-                            <td>
-                                <%@include file="rating.jsp"%>
-                                    ${track.rating}</td>
-                            <td>
-                                <form action="/track/delete" method="get">
-                                    <input type="hidden" name="idTrack" value="${track.idTrack}">
-                                    <button class="btn btn-google btn-block" type="submit">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>${track.title}</td>
+                        <td>${track.album}</td>
+                        <td>${track.artist}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${empty track.genre}">
+                                    [no data]
+                                </c:when>
+                                <c:otherwise>
+                                    ${track.genre}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>${track.duration}</td>
+                        <td>
+                                <c:if test="${track.rating.rating == 0}">
+                                    <h6 class="alert-danger font-weight-bold">Rate this track</h6>
+                                </c:if>
+                                <c:if test="${track.rating.rating != 0}">
+                                    <h6 class="alert-success font-weight-bold">Your rate: ${track.rating.rating}</h6>
+                                </c:if>
+                            <%@include file="rating.jsp" %>
+                        </td>
+                        <td>
+                            <form action="/track/delete" method="get">
+                                <input type="hidden" name="idTrack" value="${track.idTrack}">
+                                <button class="btn btn-google btn-block" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -70,4 +79,4 @@
 
 </div>
 
-<%@include file="../../footer.jsp"%>
+<%@include file="../../footer.jsp" %>

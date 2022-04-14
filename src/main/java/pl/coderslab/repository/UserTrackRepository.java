@@ -6,4 +6,6 @@ import pl.coderslab.model.UserTrack;
 
 @Repository
 public interface UserTrackRepository extends JpaRepository<UserTrack, Long> {
+
+UserTrack findByIdTrack(Long idTrack);
 }
