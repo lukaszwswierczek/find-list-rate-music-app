@@ -19,14 +19,14 @@
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h4 class="m-0 font-weight-bold text-primary">Favorite tracks:</h4>
-            <h6>Total tracks: ${total}.</h6>
+        <div class="card-header py-3 bg-gradient-danger">
+            <h4 class="m-0 font-weight-bold text-gray-900">Favorite tracks:</h4>
+            <h6 class="text-gray-900">Total tracks: ${total}.</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="font-weight-bold text-primary">
+                    <thead style="background: #f8f9fc" class="font-weight-bold text-gray-900">
                     <tr>
                         <th>Title</th>
                         <th>Album</th>
@@ -37,7 +37,7 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-gray-900 table tr:nth-child(even)">
                     <c:forEach items="${userTracks}" var="track">
                     <tr>
                         <td>${track.title}</td>
@@ -56,10 +56,10 @@
                         <td>${track.duration}</td>
                         <td>
                                 <c:if test="${track.rating.rating == 0}">
-                                    <h6 class="alert-danger font-weight-bold">Rate this track</h6>
+                                    <h6 class="alert-danger font-weight-bold text-gray-900">Rate this track</h6>
                                 </c:if>
                                 <c:if test="${track.rating.rating != 0}">
-                                    <h6 class="alert-success font-weight-bold">Your rate: ${track.rating.rating}</h6>
+                                    <h6 class="alert-success font-weight-bold text-gray-900">Your rate: ${track.rating.rating}</h6>
                                 </c:if>
                             <%@include file="rating.jsp" %>
                         </td>

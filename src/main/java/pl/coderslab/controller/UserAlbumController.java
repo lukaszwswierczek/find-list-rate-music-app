@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.repository.NoteRepository;
 import pl.coderslab.repository.UserAlbumRepository;
 import pl.coderslab.api.ApiService;
 import pl.coderslab.model.*;
@@ -15,10 +16,12 @@ import java.util.*;
 public class UserAlbumController {
 
     private final UserAlbumRepository userAlbumRepository;
+    private final NoteRepository noteRepository;
     private final ApiService apiService;
 
-    public UserAlbumController(UserAlbumRepository userAlbumRepository, ApiService apiService) {
+    public UserAlbumController(UserAlbumRepository userAlbumRepository, NoteRepository noteRepository, ApiService apiService) {
         this.userAlbumRepository = userAlbumRepository;
+        this.noteRepository = noteRepository;
         this.apiService = apiService;
     }
 
@@ -35,7 +38,15 @@ public class UserAlbumController {
             userAlbum.setYearOfRelease(data.getIntYearReleased());
             userAlbum.setRating("0");
             userAlbum.setIdAlbum(Long.valueOf(idAlbum));
+            userAlbum.setAlbumCover(data.getStrAlbumThumb());
         });
+
+        Note note = new Note();
+        note.setIdAlbum(userAlbum.getIdAlbum());
+        note.setDescription("Your note is empty");
+        noteRepository.save(note);
+
+        userAlbum.setNote(note);
         userAlbumRepository.save(userAlbum);
         return "redirect:/albums?idArtist=" + idArtist;
     }
@@ -44,6 +55,9 @@ public class UserAlbumController {
     @GetMapping("/albums/saved")
     public String displaySavedAlbums(Model model) {
         List<UserAlbum> userAlbums = userAlbumRepository.findAll();
+        List<Note> notes = noteRepository.findAll();
+        model.addAttribute("notes", notes);
+        model.addAttribute("updateNote", new Note());
         model.addAttribute("userAlbums", userAlbums);
         return "savedAlbums";
     }
@@ -58,6 +72,14 @@ public class UserAlbumController {
         return "redirect:/albums/saved";
     }
 
+    @PostMapping("/albums/saved/editNote")
+    public String editNote(Note note, Model model) {
+        model.addAttribute("updateNote", note);
+        Note albumNote = noteRepository.findByIdAlbum(note.getIdAlbum());
+        albumNote.setDescription(note.getDescription());
+        noteRepository.save(note);
+        return "redirect:/albums/saved";
+    }
 
 
 }

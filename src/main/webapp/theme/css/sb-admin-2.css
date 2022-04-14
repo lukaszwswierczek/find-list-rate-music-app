@@ -11416,4 +11416,8 @@ body{
     margin-left: 3.5rem;
     margin-right: 3.5rem;
   }
+
+  .table tr:nth-child(even) {
+    background: #f8f9fc;
+  }
 }
