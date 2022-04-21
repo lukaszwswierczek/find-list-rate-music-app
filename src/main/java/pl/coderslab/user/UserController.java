@@ -1,8 +1,16 @@
 package pl.coderslab.user;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+
 
 @Controller
 public class UserController {
@@ -13,9 +21,16 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/admin")
+    @ResponseBody
+    public String displayCurrentUser(@AuthenticationPrincipal CurrentUser customUser) {
+        User entityUser = customUser.getUser();
+        return "Hello " + entityUser.getUsername();
+    }
+
     //Należy pamiętać, że ze względu na unikalność nazwy użytkownika,
     //akcja wywoła się poprawnie tylko raz.
-    @GetMapping("/create-user")
+    @GetMapping("/create-admin")
     @ResponseBody
     public String createUser() {
         User user = new User();
@@ -23,6 +38,21 @@ public class UserController {
         user.setPassword("admin");
         userService.saveUser(user);
         return "admin";
+    }
+
+    @GetMapping("/register")
+    public String userForm(Model model) {
+        model.addAttribute("user", new User());
+        return "admin/register";
+    }
+
+    @PostMapping("/register")
+    public String createNewUser(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/register";
+        }
+        userService.saveUser(user);
+        return "redirect:/";
     }
 
 

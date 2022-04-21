@@ -56,7 +56,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="/albums/saved" data-target="#collapseTwo"
+            <a class="nav-link collapsed" href="/user/albums/saved" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <button type="button" class="btn btn-light btn-block">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note-list" viewBox="0 0 16 16">
@@ -74,7 +74,7 @@
 
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="/tracks/saved" data-target="#collapseUtilities"
+            <a class="nav-link collapsed" href="/user/tracks/saved" data-target="#collapseUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">
                 <button type="button" class="btn btn-light btn-block">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
@@ -142,15 +142,18 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                            <img class="img-profile rounded-circle" src="theme/img/undraw_profile_2.svg" alt="profile"/>
+                            <img class="img-profile rounded-circle" src="theme/img/undraw_profile_2.svg" alt=""/>
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+
+                            <form action="<c:url value="/logout"/>" method="post">
+                            <input type="submit" value="Logout" class="dropdown-item fa fa-id-badge" href="#" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            </form>
+
                         </div>
                     </li>
 

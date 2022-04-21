@@ -1,8 +1,11 @@
 package pl.coderslab.model;
 
 import lombok.*;
+import pl.coderslab.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter

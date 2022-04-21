@@ -37,12 +37,12 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-                    <tbody class="text-gray-900 table tr:nth-child(even)">
+                    <tbody class="text-gray-900 table tr:nth-child(even)" style="vertical-align: middle; font-size: large">
                     <c:forEach items="${userTracks}" var="track">
                     <tr>
                         <td>${track.title}</td>
                         <td>${track.album}</td>
-                        <td>${track.artist}</td>
+                        <td><a style="color: #fb3f00; text-decoration: none" href="/artist?artistName=${track.artist}">${track.artist}</a></td>
                         <td>
                             <c:choose>
                                 <c:when test="${empty track.genre}">

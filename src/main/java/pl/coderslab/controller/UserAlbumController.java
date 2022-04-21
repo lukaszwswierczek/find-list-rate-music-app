@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -8,27 +9,40 @@ import pl.coderslab.repository.NoteRepository;
 import pl.coderslab.repository.UserAlbumRepository;
 import pl.coderslab.api.ApiService;
 import pl.coderslab.model.*;
+import pl.coderslab.user.CurrentUser;
+import pl.coderslab.user.User;
+import pl.coderslab.user.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
+@RequestMapping("/user")
 public class UserAlbumController {
 
     private final UserAlbumRepository userAlbumRepository;
     private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
     private final ApiService apiService;
 
-    public UserAlbumController(UserAlbumRepository userAlbumRepository, NoteRepository noteRepository, ApiService apiService) {
+    public UserAlbumController(UserAlbumRepository userAlbumRepository, NoteRepository noteRepository, UserRepository userRepository, ApiService apiService) {
         this.userAlbumRepository = userAlbumRepository;
         this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
         this.apiService = apiService;
     }
 
 
     //album -- add
     @GetMapping("/album/add")
-    public String addUserAlbum(@RequestParam String idArtist, @RequestParam String idAlbum) {
+    public String addUserAlbum(@RequestParam String idArtist,
+                               @RequestParam String idAlbum,
+                               @AuthenticationPrincipal CurrentUser customUser) {
+
+        //current user
+        User listener = customUser.getUser();
+
         List<Album> albums = apiService.getSpecificAlbum(idAlbum);
         UserAlbum userAlbum = new UserAlbum();
         albums.stream().forEach(data -> {
@@ -41,13 +55,26 @@ public class UserAlbumController {
             userAlbum.setAlbumCover(data.getStrAlbumThumb());
         });
 
+        //note creation
         Note note = new Note();
         note.setIdAlbum(userAlbum.getIdAlbum());
         note.setDescription("Your note is empty");
         noteRepository.save(note);
-
         userAlbum.setNote(note);
+
+        //saving album
         userAlbumRepository.save(userAlbum);
+
+        //saving album on user list
+        List<UserAlbum> userAlbums = listener.getUserAlbums();
+        userAlbums = userAlbums.stream()
+                .filter(album -> !album.getIdAlbum().equals(userAlbum.getIdAlbum()))
+                .collect(Collectors.toList());
+
+        userAlbums.add(userAlbum);
+        listener.setUserAlbums(userAlbums);
+        userRepository.save(listener);
+
         return "redirect:/albums?idArtist=" + idArtist;
     }
 
@@ -69,7 +96,7 @@ public class UserAlbumController {
         long id = Long.parseLong(idAlbum);
         Optional<UserAlbum> album = userAlbumRepository.findById(id);
         userAlbumRepository.delete(album.get());
-        return "redirect:/albums/saved";
+        return "redirect:/user/albums/saved";
     }
 
     @PostMapping("/albums/saved/editNote")
@@ -78,7 +105,7 @@ public class UserAlbumController {
         Note albumNote = noteRepository.findByIdAlbum(note.getIdAlbum());
         albumNote.setDescription(note.getDescription());
         noteRepository.save(note);
-        return "redirect:/albums/saved";
+        return "redirect:/user/albums/saved";
     }
 
 

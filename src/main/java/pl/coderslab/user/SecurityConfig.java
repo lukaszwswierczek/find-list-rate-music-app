@@ -25,10 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
-                .and().formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/");
+                //przedrostek "ROLE_" niewymagany, bo automatycznie wstawiony
+                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/")
+                .and().logout().logoutSuccessUrl("/").permitAll();
     }
 }

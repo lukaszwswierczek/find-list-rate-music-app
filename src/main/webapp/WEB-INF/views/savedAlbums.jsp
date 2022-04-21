@@ -26,8 +26,7 @@
             <div class="table-responsive">
                 <table style="text-align: center" class="text-gray-900 table text-lg" id="dataTable" width="100%"
                        cellspacing="0">
-                    <thead style="background: #f8f9fc" class="font-weight-bold text-gray-900"
-                    ">
+                    <thead style="background: #f8f9fc" class="font-weight-bold text-gray-900">
                     <tr>
                         <th></th>
                         <th>Album</th>
@@ -38,13 +37,12 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-                    <tbody style="vertical-align: middle" class="table tr:nth-child(even)">
+                    <tbody style="vertical-align: middle; font-size: x-large" class="table tr:nth-child(even)">
                     <c:forEach items="${userAlbums}" var="album">
                         <tr>
-                            <td><img class="border-left-danger rotate-n-15" src="${album.albumCover}/preview"
-                                     width="120em"></td>
+                            <td rowspan="2"><img style="border-radius: 8px; height: 7em" class="border-left-danger" src="${album.albumCover}/preview"></td>
                             <td>${album.album}</td>
-                            <td>${album.artist}</td>
+                            <td><a style="color: #fb3f00; text-decoration: none" href="/artist?artistName=${album.artist}">${album.artist}</a></td>
                             <td>${album.yearOfRelease}</td>
                             <td>
                                 <c:choose>
@@ -62,7 +60,7 @@
                                     <input type="hidden" name="idAlbum" value="${album.idAlbum}">
                                     <button class="btn btn-facebook btn-block" type="submit">Tracklist</button>
                                 </form>
-                                <form action="/album/delete" method="get">
+                                <form action="/user/album/delete" method="get">
                                     <input type="hidden" name="idAlbum" value="${album.idAlbum}">
                                     <button class="btn btn-google btn-block" type="submit">Delete</button>
                                 </form>
@@ -103,7 +101,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="7">
+                            <td style="font-size: medium; height: 3em" colspan="6">
                                 <c:out value="${album.note.description}" default="Your note is empty"/>
                             </td>
                         </tr>

@@ -12,14 +12,14 @@
 <%@ include file="../../header.jsp" %>
 
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary">${artistName} discography:</h4>
+    <div class="card-header py-3 bg-gradient-danger">
+        <h4 class="m-0 font-weight-bold text-gray-900">${artistName} discography:</h4>
     </div>
 
 
     <div class="card-body">
-        <table class="table">
-            <tr class="font-weight-bold text-primary" align="center">
+        <table style="text-align: center" class="text-gray-900 table text-lg">
+            <tr class="font-weight-bold" align="center">
                 <th>Album</th>
                 <th>Year</th>
                 <th>Genre</th>
@@ -27,7 +27,7 @@
                 <th></th>
             </tr>
             <tfoot>
-            <tr class="font-weight-bold text-primary">
+            <tr>
                 <th>Album</th>
                 <th>Year</th>
                 <th>Genre</th>
@@ -35,10 +35,11 @@
                 <th></th>
             </tr>
             </tfoot>
+            <tbody style="vertical-align: middle; font-size: x-large">
             <c:forEach items="${albums}" var="album">
                 <c:if test="${album.strReleaseFormat == 'Album'}">
                     <tr>
-                        <td class="font-weight-bold text-primary">${album.strAlbum}</td>
+                        <td>${album.strAlbum}</td>
                         <td>
                             <c:choose>
                                 <c:when test="${album.intYearReleased == 0}">
@@ -56,12 +57,12 @@
                                     [no cover art data]
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="${album.strAlbumThumb}/preview"/>
+                                    <img style="border-radius: 8px" class="border-left-danger" src="${album.strAlbumThumb}/preview"/>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td class="text-center">
-                            <form method="get" action="/album/add" id="add">
+                            <form method="get" action="/user/album/add" id="add">
                                 <input type="hidden" name="idArtist" value="${album.idArtist}">
                                 <input type="hidden" name="idAlbum" value="${album.idAlbum}">
                                 <button class="btn btn-google btn-block" type="submit">Add
@@ -77,6 +78,7 @@
                     </tr>
                 </c:if>
             </c:forEach>
+            </tbody>
         </table>
     </div>
     <%--<script src='<spring:url value="/vendor/jquery/jquery.slim.min.js"/>'></script>--%>
