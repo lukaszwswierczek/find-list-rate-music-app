@@ -80,22 +80,43 @@ public class UserAlbumController {
 
     //album -- list
     @GetMapping("/albums/saved")
-    public String displaySavedAlbums(Model model) {
-        List<UserAlbum> userAlbums = userAlbumRepository.findAll();
-        List<Note> notes = noteRepository.findAll();
-        model.addAttribute("notes", notes);
+    public String displaySavedAlbums(Model model,
+                                     @AuthenticationPrincipal CurrentUser customUser) {
+        //current user list
+        User listener = customUser.getUser();
+        List<UserAlbum> listenerUserAlbums = listener.getUserAlbums();
+
         model.addAttribute("updateNote", new Note());
-        model.addAttribute("userAlbums", userAlbums);
+        model.addAttribute("userAlbums", listenerUserAlbums);
         return "savedAlbums";
     }
 
 
     //album -- delete
     @GetMapping("/album/delete")
-    public String deleteAlbum(@RequestParam String idAlbum) {
-        long id = Long.parseLong(idAlbum);
-        Optional<UserAlbum> album = userAlbumRepository.findById(id);
-        userAlbumRepository.delete(album.get());
+    public String deleteAlbum(@RequestParam String idAlbum,
+                              @AuthenticationPrincipal CurrentUser customUser) {
+
+        //updating user's list
+        User listener = customUser.getUser();
+        List<UserAlbum> listenerAlbums = listener.getUserAlbums();
+        List<UserAlbum> updatedAlbums = listenerAlbums.stream()
+                .filter(album -> !album.getIdAlbum().equals(Long.valueOf(idAlbum)))
+                .collect(Collectors.toList());
+        listener.setUserAlbums(updatedAlbums);
+        userRepository.save(listener);
+
+        //deleting from albums table if no user has that album on their list
+        UserAlbum album = userAlbumRepository.findById(Long.valueOf(idAlbum)).get();
+
+        List<User> allUsers = userRepository.findAll();
+        List<User> listOfUsersWithAlbum = allUsers.stream()
+                .filter(user -> user.getUserAlbums().contains(album))
+                .collect(Collectors.toList());
+        if (listOfUsersWithAlbum.isEmpty()) {
+            userAlbumRepository.delete(album);
+        }
+
         return "redirect:/user/albums/saved";
     }
 

@@ -31,7 +31,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_albums")
     private List<UserAlbum> userAlbums = new ArrayList<>();
 

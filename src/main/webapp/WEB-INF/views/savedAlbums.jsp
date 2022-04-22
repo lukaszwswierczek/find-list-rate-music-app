@@ -88,7 +88,7 @@
                                         </div>
                                         <div class="font-weight-bold">
                                             <div class="text-truncate">
-                                                <form:form method="post" action="/albums/saved/editNote"
+                                                <form:form method="post" action="/user/albums/saved/editNote"
                                                            modelAttribute="updateNote">
                                                     <form:hidden path="idAlbum" value="${album.idAlbum}"/>
                                                     <form:textarea path="description"
@@ -102,7 +102,7 @@
                         </tr>
                         <tr>
                             <td style="font-size: medium; height: 3em" colspan="6">
-                                <c:out value="${album.note.description}" default="Your note is empty"/>
+                                <c:out value="${album.note.description}"/>
                             </td>
                         </tr>
                     </c:forEach>
