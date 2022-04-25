@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,20 +38,22 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                         </div>
-                        <form class="user" method="post">
+                        <form:form class="user" method="post" modelAttribute="user">
                             <div class="form-group">
                                 <input type="text" name="username" class="form-control form-control-user"
                                        id="exampleFirstName"
                                        placeholder="Username">
+                                <form:errors path="username" cssClass="text-danger"/>
                             </div>
                             <div class="form-group">
                                 <input type="password" name="password" class="form-control form-control-user"
                                        id="exampleInputPassword" placeholder="Password">
+                                <form:errors path="password" cssClass="text-danger"/>
                             </div>
                             <input type="submit" class="btn btn-primary btn-user btn-block"
                                    value="Register Account"/>
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        </form>
+                        </form:form>
                         <hr>
                         <div class="text-center">
                             <a class="small" href="/login">Already have an account? Login!</a>

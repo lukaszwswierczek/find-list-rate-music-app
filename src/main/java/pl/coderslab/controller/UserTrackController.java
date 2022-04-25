@@ -53,6 +53,7 @@ public class UserTrackController {
                 String duration = data.getIntDuration().substring(0, 3);
                 track.setDuration(String.format("%02d:%02d", Integer.parseInt(duration) / 60, Integer.parseInt(duration) % 60));
                 track.setUser(listener);
+
             });
 
             //rating creation

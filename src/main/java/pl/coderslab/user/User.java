@@ -7,6 +7,7 @@ import pl.coderslab.model.UserAlbum;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -23,8 +24,10 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 60)
+    @NotBlank(message = "Username field must be filled.")
+    @Size(min = 5, message = "Must contain at least 5 characters.")
     private String username;
-    @NotNull
+    @NotBlank(message = "Password field must be filled.")
     @Size(min = 5, message = "Must contain at least 5 characters.")
     private String password;
     private int enabled;
