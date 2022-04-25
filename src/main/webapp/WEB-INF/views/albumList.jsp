@@ -20,10 +20,10 @@
     <div class="card-body">
         <table style="text-align: center" class="text-gray-900 table text-lg">
             <tr class="font-weight-bold" align="center">
+                <th>Cover art</th>
                 <th>Album</th>
                 <th>Year</th>
                 <th>Genre</th>
-                <th>Cover art</th>
                 <th></th>
             </tr>
             <tfoot>
@@ -39,6 +39,16 @@
             <c:forEach items="${albums}" var="album">
                 <c:if test="${album.strReleaseFormat == 'Album'}">
                     <tr>
+                        <td>
+                            <c:choose>
+                                <c:when test="${empty album.strAlbumThumb}">
+                                    [no cover art data]
+                                </c:when>
+                                <c:otherwise>
+                                    <img style="border-radius: 8px" class="border-left-danger" src="${album.strAlbumThumb}/preview"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td>${album.strAlbum}</td>
                         <td>
                             <c:choose>
@@ -51,16 +61,6 @@
                             </c:choose>
                         </td>
                         <td>${album.strGenre}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${empty album.strAlbumThumb}">
-                                    [no cover art data]
-                                </c:when>
-                                <c:otherwise>
-                                    <img style="border-radius: 8px" class="border-left-danger" src="${album.strAlbumThumb}/preview"/>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
                         <td class="text-center">
                             <form method="get" action="/user/album/add" id="add">
                                 <input type="hidden" name="idArtist" value="${album.idArtist}">

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.coderslab.user.User;
 
 import javax.persistence.*;
 
@@ -15,11 +16,13 @@ import javax.persistence.*;
 public class Rating {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long idTrack;
     private String rating;
 
-//    @OneToOne
-//    private UserTrack userTrack;
+    @OneToOne
+    private User user;
 
 
 }

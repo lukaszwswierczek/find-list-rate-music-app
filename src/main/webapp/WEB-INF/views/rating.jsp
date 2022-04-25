@@ -1,41 +1,41 @@
 <div class="rating">
-    <form:form class="form-check-inline" action="/tracks/saved" method="post" modelAttribute="updateRating">
-        <form:radiobutton path="rating" name="${track.idTrack}" class="rating__control screen-reader"
-                          id="rc1-${track.idTrack}" value="1"/>
-        <form:radiobutton path="rating" name="${track.idTrack}" class="rating__control screen-reader"
-                          id="rc2-${track.idTrack}" value="2"/>
-        <form:radiobutton path="rating" name="${track.idTrack}" class="rating__control screen-reader"
-                          id="rc3-${track.idTrack}" value="3"/>
-        <form:radiobutton path="rating" name="${track.idTrack}" class="rating__control screen-reader"
-                          id="rc4-${track.idTrack}" value="4"/>
-        <form:radiobutton path="rating" name="${track.idTrack}" class="rating__control screen-reader"
-                          id="rc5-${track.idTrack}" value="5"/>
-        <form:hidden path="idTrack" name="id" value="${track.idTrack}"/>
-        <label for="rc1-${track.idTrack}" class="rating__item">
+    <form:form class="form-check-inline" action="/user/tracks/edit-rating" method="post" modelAttribute="updateRating">
+        <form:hidden path="id" value="${track.rating.id}"/>
+        <form:radiobutton path="rating" class="rating__control screen-reader"
+                          id="rc1-${track.rating.id}" value="1"/>
+        <form:radiobutton path="rating" class="rating__control screen-reader"
+                          id="rc2-${track.rating.id}" value="2"/>
+        <form:radiobutton path="rating" class="rating__control screen-reader"
+                          id="rc3-${track.rating.id}" value="3"/>
+        <form:radiobutton path="rating" class="rating__control screen-reader"
+                          id="rc4-${track.rating.id}" value="4"/>
+        <form:radiobutton path="rating" class="rating__control screen-reader"
+                          id="rc5-${track.rating.id}" value="5"/>
+        <label for="rc1-${track.rating.id}" class="rating__item">
             <svg class="rating__star">
                 <use xlink:href="#star"></use>
             </svg>
             <span class="screen-reader">1</span>
         </label>
-        <label for="rc2-${track.idTrack}" class="rating__item">
+        <label for="rc2-${track.rating.id}" class="rating__item">
             <svg class="rating__star">
                 <use xlink:href="#star"></use>
             </svg>
             <span class="screen-reader">2</span>
         </label>
-        <label for="rc3-${track.idTrack}" class="rating__item">
+        <label for="rc3-${track.rating.id}" class="rating__item">
             <svg class="rating__star">
                 <use xlink:href="#star"></use>
             </svg>
             <span class="screen-reader">3</span>
         </label>
-        <label for="rc4-${track.idTrack}" class="rating__item">
+        <label for="rc4-${track.rating.id}" class="rating__item">
             <svg class="rating__star">
                 <use xlink:href="#star"></use>
             </svg>
             <span class="screen-reader">4</span>
         </label>
-        <label for="rc5-${track.idTrack}" class="rating__item">
+        <label for="rc5-${track.rating.id}" class="rating__item">
             <svg class="rating__star">
                 <use xlink:href="#star"></use>
             </svg>

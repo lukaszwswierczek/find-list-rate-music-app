@@ -37,39 +37,58 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-                    <tbody class="text-gray-900 table tr:nth-child(even)" style="vertical-align: middle; font-size: large">
+                    <tbody class="text-gray-900 table tr:nth-child(even)"
+                           style="vertical-align: middle; font-size: large">
                     <c:forEach items="${userTracks}" var="track">
-                    <tr>
-                        <td>${track.title}</td>
-                        <td>${track.album}</td>
-                        <td><a style="color: #fb3f00; text-decoration: none" href="/artist?artistName=${track.artist}">${track.artist}</a></td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${empty track.genre}">
-                                    [no data]
-                                </c:when>
-                                <c:otherwise>
-                                    ${track.genre}
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>${track.duration}</td>
-                        <td>
+                        <tr>
+                            <td>${track.title}</td>
+                            <td>${track.album}</td>
+                            <td><a style="color: #fb3f00; text-decoration: none"
+                                   href="/artist?artistName=${track.artist}">${track.artist}</a></td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${empty track.genre}">
+                                        [no data]
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${track.genre}
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>${track.duration}</td>
+                            <td>
                                 <c:if test="${track.rating.rating == 0}">
                                     <h6 class="alert-danger font-weight-bold text-gray-900">Rate this track</h6>
                                 </c:if>
                                 <c:if test="${track.rating.rating != 0}">
-                                    <h6 class="alert-success font-weight-bold text-gray-900">Your rate: ${track.rating.rating}</h6>
+                                    <h6 class="alert-success font-weight-bold text-gray-900">Your
+                                        rate: ${track.rating.rating}</h6>
                                 </c:if>
-                            <%@include file="rating.jsp" %>
-                        </td>
-                        <td>
-                            <form action="/track/delete" method="get">
-                                <input type="hidden" name="idTrack" value="${track.idTrack}">
-                                <button class="btn btn-google btn-block" type="submit">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+
+                                <form:form class="form-check-inline" action="/user/tracks/edit-rating" method="post"
+                                           modelAttribute="updateRating">
+                                    <form:hidden path="idTrack" value="${track.rating.id}"/>
+                                    <form:radiobutton path="rating" value="1"/>
+                                    <form:radiobutton path="rating" value="2"/>
+                                    <form:radiobutton path="rating" value="3"/>
+                                    <form:radiobutton path="rating" value="4"/>
+                                    <form:radiobutton path="rating" value="5"/>
+                                    <button class="btn-outline-dark btn-block bg-transparent" type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                        </svg>
+                                    </button>
+                                </form:form>
+
+                            </td>
+                            <td>
+                                <form action="/user/track/delete" method="get">
+                                    <input type="hidden" name="id" value="${track.id}">
+                                    <button class="btn btn-google btn-block" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
                     </c:forEach>
                     </tbody>
                 </table>

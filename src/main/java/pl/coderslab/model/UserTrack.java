@@ -3,6 +3,7 @@ package pl.coderslab.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.coderslab.user.User;
 
 import javax.persistence.*;
 
@@ -13,6 +14,8 @@ import javax.persistence.*;
 public class UserTrack {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long idTrack;
     private Long idAlbum;
     private String artist;
@@ -21,7 +24,9 @@ public class UserTrack {
     private String genre;
     private String duration;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ratings_id", unique = true)
+    @OneToOne
     private Rating rating;
+
+    @OneToOne
+    private User user;
 }

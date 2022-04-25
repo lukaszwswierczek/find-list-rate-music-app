@@ -14,7 +14,6 @@ import pl.coderslab.user.User;
 import pl.coderslab.user.UserRepository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -40,8 +39,10 @@ public class UserAlbumController {
                                @RequestParam String idAlbum,
                                @AuthenticationPrincipal CurrentUser customUser) {
 
-        //current user(=listener)
+        //current user = listener
         User listener = customUser.getUser();
+
+        if(userAlbumRepository.findUserAlbumByUserAndIdAlbum(listener,Long.parseLong(idAlbum)) == null){
 
         List<Album> albums = apiService.getSpecificAlbum(idAlbum);
         UserAlbum userAlbum = new UserAlbum();
@@ -65,7 +66,7 @@ public class UserAlbumController {
         userAlbum.setNote(note);
 
         //saving album
-        userAlbumRepository.save(userAlbum);
+        userAlbumRepository.save(userAlbum);}
 
         return "redirect:/albums?idArtist=" + idArtist;
     }
@@ -85,8 +86,7 @@ public class UserAlbumController {
 
     //album -- delete
     @GetMapping("/album/delete")
-    public String deleteAlbum(@RequestParam String id,
-                              @AuthenticationPrincipal CurrentUser customUser) {
+    public String deleteAlbum(@RequestParam String id) {
 
         UserAlbum album = userAlbumRepository.findById(Long.parseLong(id)).get();
         userAlbumRepository.delete(album);
@@ -94,10 +94,10 @@ public class UserAlbumController {
         return "redirect:/user/albums/saved";
     }
 
+    //album -- update note
     @PostMapping("/albums/saved/editNote")
     public String editNote(Note note,
-                           Model model,
-                           @AuthenticationPrincipal CurrentUser customUser) {
+                           Model model) {
 
         model.addAttribute("updateNote", note);
         Note albumNote = noteRepository.findById(note.getId()).get();

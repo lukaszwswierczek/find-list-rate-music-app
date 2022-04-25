@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +10,10 @@ import pl.coderslab.repository.UserTrackRepository;
 import pl.coderslab.api.ApiService;
 import pl.coderslab.model.Track;
 import pl.coderslab.model.UserTrack;
+import pl.coderslab.user.CurrentUser;
+import pl.coderslab.user.User;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -29,59 +31,80 @@ public class UserTrackController {
 
     //track -- add
     @GetMapping("/add/track-to-favorites")
-    public String addTrackToFavorites(@RequestParam String idTrack, @RequestParam String idAlbum) {
-        List<Track> tracks = apiService.getSpecificTrack(idTrack);
-        UserTrack track = new UserTrack();
-        tracks.stream().forEach(data -> {
-            track.setIdTrack(Long.parseLong(data.getIdTrack()));
-            track.setAlbum(data.getStrAlbum());
-            track.setIdAlbum(Long.parseLong(data.getIdAlbum()));
-            track.setArtist(data.getStrArtist());
-            track.setGenre(data.getStrGenre());
-            track.setTitle(data.getStrTrack());
-            //formatting duration
-            String duration = data.getIntDuration().substring(0, 3);
-            track.setDuration(String.format("%02d:%02d", Integer.parseInt(duration) / 60, Integer.parseInt(duration) % 60));
-        });
-        //new rating for a track
-        Rating rating = new Rating();
-        rating.setIdTrack(track.getIdTrack());
-        rating.setRating("0");
-        ratingRepository.save(rating);
+    public String addTrackToFavorites(@RequestParam String idTrack,
+                                      @RequestParam String idAlbum,
+                                      @AuthenticationPrincipal CurrentUser customUser) {
 
-        track.setRating(ratingRepository.getById(track.getIdTrack()));
-        userTrackRepository.save(track);
+        //current user = listener
+        User listener = customUser.getUser();
+
+        if (userTrackRepository.findUserTrackByUserAndIdTrack(listener, Long.parseLong(idTrack)) == null) {
+
+            List<Track> tracks = apiService.getSpecificTrack(idTrack);
+            UserTrack track = new UserTrack();
+            tracks.stream().forEach(data -> {
+                track.setIdTrack(Long.parseLong(data.getIdTrack()));
+                track.setAlbum(data.getStrAlbum());
+                track.setIdAlbum(Long.parseLong(data.getIdAlbum()));
+                track.setArtist(data.getStrArtist());
+                track.setGenre(data.getStrGenre());
+                track.setTitle(data.getStrTrack());
+                //formatting duration
+                String duration = data.getIntDuration().substring(0, 3);
+                track.setDuration(String.format("%02d:%02d", Integer.parseInt(duration) / 60, Integer.parseInt(duration) % 60));
+                track.setUser(listener);
+            });
+
+            //rating creation
+            Rating rating = new Rating();
+            rating.setIdTrack(track.getIdTrack());
+            rating.setRating("0");
+            rating.setUser(listener);
+            ratingRepository.save(rating);
+            track.setRating(rating);
+
+            //saving track
+            userTrackRepository.save(track);
+        }
+
         return "redirect:/tracks?idAlbum=" + idAlbum;
     }
 
     //track -- list
     @GetMapping("/tracks/saved")
-    public String displaySavedTracks(Model model) {
-        List<UserTrack> userTracks = userTrackRepository.findAll();
-        List<Rating> ratings = ratingRepository.findAll();
-        long total = userTracks.size();
+    public String displaySavedTracks(Model model,
+                                     @AuthenticationPrincipal CurrentUser customUser) {
+
+        User listener = customUser.getUser();
+        List<UserTrack> listenerTracks = userTrackRepository.findByUser(listener);
+
+        long total = listenerTracks.size();
         model.addAttribute("total", total);
         model.addAttribute("updateRating", new Rating());
-        model.addAttribute("userTracks", userTracks);
-        model.addAttribute("ratings", ratings);
+        model.addAttribute("userTracks", listenerTracks);
+
         return "savedTracks";
     }
 
-    @PostMapping("/tracks/saved")
-    public String updateRating(Rating rating, Model model) {
-        model.addAttribute("updateRating",rating);
-        Rating trackRating = ratingRepository.findByIdTrack(rating.getIdTrack());
-        trackRating.setRating(rating.getRating());
-        ratingRepository.save(rating);
-        return "redirect:/tracks/saved";
+    @PostMapping("/tracks/edit-rating")
+    public String updateRating(Rating rating,
+                               Model model,
+                               @AuthenticationPrincipal CurrentUser customUser) {
+
+        model.addAttribute("updateRating", rating);
+        Rating update = ratingRepository.findRatingByUserAndIdTrack(customUser.getUser(), rating.getIdTrack());
+        update.setRating(rating.getRating());
+        ratingRepository.save(update);
+
+        return "redirect:/user/tracks/saved";
     }
 
     //track -- delete
     @GetMapping("/track/delete")
-    public String deleteTrack(@RequestParam Long idTrack) {
-        Optional<UserTrack> track = userTrackRepository.findById(idTrack);
-        userTrackRepository.delete(track.get());
-        return "redirect:/tracks/saved";
+    public String deleteTrack(@RequestParam Long id) {
+        UserTrack track = userTrackRepository.findById(id).get();
+        userTrackRepository.delete(track);
+        return "redirect:/user/tracks/saved";
     }
 
 

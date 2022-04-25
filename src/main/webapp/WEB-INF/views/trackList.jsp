@@ -30,7 +30,7 @@
                         <td>${track.intTrackNumber}</td>
                         <td>${track.strTrack}</td>
                         <td align="center">
-                            <form method="get" action="/add/track-to-favorites">
+                            <form method="get" action="/user/add/track-to-favorites">
                                 <input type="hidden" name="idTrack" value="${track.idTrack}">
                                 <input type="hidden" name="idAlbum" value="${track.idAlbum}">
                                 <button type="submit" class="btn btn-google btn-block">
