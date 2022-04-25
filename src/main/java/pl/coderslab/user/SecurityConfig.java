@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //przedrostek "ROLE_" niewymagany, bo automatycznie wstawiony
                 .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
-                .and().formLogin().loginPage("/login").defaultSuccessUrl("/")
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/user")
                 .and().logout().logoutSuccessUrl("/").permitAll();
     }
 }
