@@ -67,7 +67,7 @@
 
                                 <form:form class="form-check-inline" action="/user/tracks/edit-rating" method="post"
                                            modelAttribute="updateRating">
-                                    <form:hidden path="idTrack" value="${track.rating.id}"/>
+                                    <form:hidden path="idTrack" value="${track.idTrack}"/>
                                     <form:radiobutton path="rating" value="1"/>
                                     <form:radiobutton path="rating" value="2"/>
                                     <form:radiobutton path="rating" value="3"/>

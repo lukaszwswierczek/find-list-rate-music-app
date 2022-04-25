@@ -33,7 +33,6 @@
                         <th>Artist</th>
                         <th>Year of release</th>
                         <th>Genre</th>
-                        <th>Rating</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -54,7 +53,6 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td>${album.rating}</td>
                             <td>
                                 <form method="get" action="/tracks">
                                     <input type="hidden" name="idAlbum" value="${album.idAlbum}">
@@ -76,26 +74,28 @@
                                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="messagesDropdown">
                                     <h6 class="dropdown-header">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                                        </svg>
                                         Space for your notes
                                     </h6>
                                     <a class="dropdown-item d-flex align-items-center">
-                                        <div class="dropdown-list-image mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-                                            </svg>
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div class="font-weight-bold">
-                                            <div class="text-truncate">
+<%--                                        <div class="dropdown-list-image mr-3">--%>
+
+<%--                                            <div class="status-indicator bg-success"></div>--%>
+<%--                                        </div>--%>
+<%--                                        <div class="font-weight-bold">--%>
+<%--                                            <div class="text-truncate">--%>
                                                 <form:form method="post" action="/user/albums/saved/editNote"
                                                            modelAttribute="updateNote">
                                                     <form:hidden path="id" value="${album.note.id}"/>
                                                     <form:textarea path="description"
                                                                    placeholder="${album.note.description}"/>
-                                                    <input type="submit">
+                                                    <hr>
+                                                    <input class="btn-block bg-gradient-danger btn-outline-dark font-weight-bolder text-white" value="Edit note" type="submit">
                                                 </form:form>
-                                            </div>
+<%--                                            </div>--%>
                                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             </td>

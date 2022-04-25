@@ -23,10 +23,9 @@ public class UserAlbum {
     private String album;
     private String yearOfRelease;
     private String genre;
-    private String rating;
     private String albumCover;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Note note;
 
     @OneToOne

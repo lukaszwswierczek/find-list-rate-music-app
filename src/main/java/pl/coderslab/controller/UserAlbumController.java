@@ -51,7 +51,6 @@ public class UserAlbumController {
             userAlbum.setAlbum(data.getStrAlbum());
             userAlbum.setGenre(data.getStrGenre());
             userAlbum.setYearOfRelease(data.getIntYearReleased());
-            userAlbum.setRating("0");
             userAlbum.setIdAlbum(Long.valueOf(idAlbum));
             userAlbum.setAlbumCover(data.getStrAlbumThumb());
             userAlbum.setUser(listener);

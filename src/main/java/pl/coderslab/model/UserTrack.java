@@ -24,7 +24,7 @@ public class UserTrack {
     private String genre;
     private String duration;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Rating rating;
 
     @OneToOne
