@@ -61,7 +61,7 @@
                                     <button class="btn btn-facebook btn-block" type="submit">Tracklist</button>
                                 </form>
                                 <form action="/user/album/delete" method="get">
-                                    <input type="hidden" name="idAlbum" value="${album.idAlbum}">
+                                    <input type="hidden" name="id" value="${album.id}">
                                     <button class="btn btn-google btn-block" type="submit">Delete</button>
                                 </form>
 
@@ -90,7 +90,7 @@
                                             <div class="text-truncate">
                                                 <form:form method="post" action="/user/albums/saved/editNote"
                                                            modelAttribute="updateNote">
-                                                    <form:hidden path="idAlbum" value="${album.idAlbum}"/>
+                                                    <form:hidden path="id" value="${album.note.id}"/>
                                                     <form:textarea path="description"
                                                                    placeholder="${album.note.description}"/>
                                                     <input type="submit">
@@ -102,7 +102,7 @@
                         </tr>
                         <tr>
                             <td style="font-size: medium; height: 3em" colspan="6">
-                                <c:out value="${album.note.description}"/>
+                                ${album.note.description}
                             </td>
                         </tr>
                     </c:forEach>

@@ -40,7 +40,7 @@ public class UserAlbumController {
                                @RequestParam String idAlbum,
                                @AuthenticationPrincipal CurrentUser customUser) {
 
-        //current user
+        //current user(=listener)
         User listener = customUser.getUser();
 
         List<Album> albums = apiService.getSpecificAlbum(idAlbum);
@@ -53,27 +53,19 @@ public class UserAlbumController {
             userAlbum.setRating("0");
             userAlbum.setIdAlbum(Long.valueOf(idAlbum));
             userAlbum.setAlbumCover(data.getStrAlbumThumb());
+            userAlbum.setUser(listener);
         });
 
         //note creation
         Note note = new Note();
         note.setIdAlbum(userAlbum.getIdAlbum());
         note.setDescription("Your note is empty");
+        note.setUser(listener);
         noteRepository.save(note);
         userAlbum.setNote(note);
 
         //saving album
         userAlbumRepository.save(userAlbum);
-
-        //saving album on user list
-        List<UserAlbum> userAlbums = listener.getUserAlbums();
-        userAlbums = userAlbums.stream()
-                .filter(album -> !album.getIdAlbum().equals(userAlbum.getIdAlbum()))
-                .collect(Collectors.toList());
-
-        userAlbums.add(userAlbum);
-        listener.setUserAlbums(userAlbums);
-        userRepository.save(listener);
 
         return "redirect:/albums?idArtist=" + idArtist;
     }
@@ -83,49 +75,34 @@ public class UserAlbumController {
     public String displaySavedAlbums(Model model,
                                      @AuthenticationPrincipal CurrentUser customUser) {
         //current user list
-        User listener = customUser.getUser();
-        List<UserAlbum> listenerUserAlbums = listener.getUserAlbums();
+        List<UserAlbum> listenerAlbums = userAlbumRepository.findByUser(customUser.getUser());
 
         model.addAttribute("updateNote", new Note());
-        model.addAttribute("userAlbums", listenerUserAlbums);
+        model.addAttribute("userAlbums", listenerAlbums);
         return "savedAlbums";
     }
 
 
     //album -- delete
     @GetMapping("/album/delete")
-    public String deleteAlbum(@RequestParam String idAlbum,
+    public String deleteAlbum(@RequestParam String id,
                               @AuthenticationPrincipal CurrentUser customUser) {
 
-        //updating user's list
-        User listener = customUser.getUser();
-        List<UserAlbum> listenerAlbums = listener.getUserAlbums();
-        List<UserAlbum> updatedAlbums = listenerAlbums.stream()
-                .filter(album -> !album.getIdAlbum().equals(Long.valueOf(idAlbum)))
-                .collect(Collectors.toList());
-        listener.setUserAlbums(updatedAlbums);
-        userRepository.save(listener);
-
-        //deleting from albums table if no user has that album on their list
-        UserAlbum album = userAlbumRepository.findById(Long.valueOf(idAlbum)).get();
-
-        List<User> allUsers = userRepository.findAll();
-        List<User> listOfUsersWithAlbum = allUsers.stream()
-                .filter(user -> user.getUserAlbums().contains(album))
-                .collect(Collectors.toList());
-        if (listOfUsersWithAlbum.isEmpty()) {
-            userAlbumRepository.delete(album);
-        }
+        UserAlbum album = userAlbumRepository.findById(Long.parseLong(id)).get();
+        userAlbumRepository.delete(album);
 
         return "redirect:/user/albums/saved";
     }
 
     @PostMapping("/albums/saved/editNote")
-    public String editNote(Note note, Model model) {
+    public String editNote(Note note,
+                           Model model,
+                           @AuthenticationPrincipal CurrentUser customUser) {
+
         model.addAttribute("updateNote", note);
-        Note albumNote = noteRepository.findByIdAlbum(note.getIdAlbum());
+        Note albumNote = noteRepository.findById(note.getId()).get();
         albumNote.setDescription(note.getDescription());
-        noteRepository.save(note);
+        noteRepository.save(albumNote);
         return "redirect:/user/albums/saved";
     }
 

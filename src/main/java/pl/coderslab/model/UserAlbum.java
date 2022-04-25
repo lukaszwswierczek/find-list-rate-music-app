@@ -16,7 +16,8 @@ import java.util.List;
 public class UserAlbum {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long idAlbum;
     private String artist;
     private String album;
@@ -28,4 +29,6 @@ public class UserAlbum {
     @OneToOne
     private Note note;
 
+    @OneToOne
+    private User user;
 }

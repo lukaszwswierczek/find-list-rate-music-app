@@ -2,6 +2,7 @@ package pl.coderslab.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.coderslab.model.Note;
 import pl.coderslab.model.UserAlbum;
 
 import javax.persistence.*;
@@ -24,15 +25,10 @@ public class User {
     @Column(nullable = false, unique = true, length = 60)
     private String username;
     @NotNull
-    @Size(min = 5)
+    @Size(min = 5, message = "Must contain at least 5 characters.")
     private String password;
     private int enabled;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles;
-
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_albums")
-    private List<UserAlbum> userAlbums = new ArrayList<>();
-
 }

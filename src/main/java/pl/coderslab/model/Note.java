@@ -3,10 +3,9 @@ package pl.coderslab.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.coderslab.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Setter
@@ -16,6 +15,11 @@ import javax.persistence.Table;
 public class Note {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long idAlbum;
     private String description;
+
+    @OneToOne
+    private User user;
 }
