@@ -16,5 +16,5 @@ My objective was to create an application which would come in handy to any music
 - MySQL
 - JSP for front-end
 
-#Contact
+# Contact
 Please add suggestions or contact me if you like my project.
