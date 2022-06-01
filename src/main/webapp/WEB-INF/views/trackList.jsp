@@ -25,6 +25,7 @@
                     <th align="center">Add to favorites</th>
                 </tr>
                 </thead>
+            <tbody style="vertical-align: middle; font-size: x-large">
                 <c:forEach items="${tracks}" var="track">
                     <tr>
                         <td>${track.intTrackNumber}</td>
@@ -40,6 +41,7 @@
                         </td>
                     </tr>
                 </c:forEach>
+            </tbody>
             </table>
         </div>
     </div>
