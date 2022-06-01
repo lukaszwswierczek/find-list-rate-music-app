@@ -16,5 +16,7 @@ My objective was to create an application which would come in handy to any music
 - MySQL
 - JSP for front-end
 
+Project contains elements from free Bootstrap theme.
+
 # Contact
 Please add suggestions or contact me if you like my project.
